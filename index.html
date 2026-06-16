@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NaTech 9 – Kapitel 5: Genetik und Gentechnik</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, sans-serif; background: #f0f7f0; color: #1a1a1a; min-height: 100vh; }
+
+/* ── Header ── */
+.header {
+  background: linear-gradient(135deg, #2d7d46 0%, #1a5c32 100%);
+  color: white; padding: 18px 24px 14px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.25);
+}
+.header h1 { font-size: 22px; font-weight: 700; letter-spacing: 0.3px; }
+.header p  { font-size: 13px; opacity: 0.85; margin-top: 3px; }
+
+/* ── Tabs ── */
+.tab-bar {
+  display: flex; flex-wrap: wrap; gap: 4px;
+  background: #1a5c32; padding: 10px 12px 0;
+}
+.tab-btn {
+  background: rgba(255,255,255,0.18); border: none; color: rgba(255,255,255,0.85);
+  padding: 8px 14px; border-radius: 6px 6px 0 0; cursor: pointer;
+  font-size: 12.5px; font-weight: 600; font-family: Arial, sans-serif;
+  transition: background 0.2s, color 0.2s;
+}
+.tab-btn:hover  { background: rgba(255,255,255,0.28); }
+.tab-btn.active { background: #f0f7f0; color: #1a5c32; }
+
+/* ── Panels ── */
+.tab-panel { display: none; padding: 22px; max-width: 960px; margin: 0 auto; }
+.tab-panel.active { display: block; }
+
+/* ── Section headings ── */
+.section-title {
+  font-size: 16px; font-weight: 700; color: #1a5c32;
+  border-left: 4px solid #4caf50; padding-left: 10px; margin: 22px 0 12px;
+}
+.section-title:first-child { margin-top: 0; }
+
+/* ── Concept cards ── */
+.card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px,1fr)); gap: 14px; }
+.concept-card {
+  background: white; border-radius: 10px; padding: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-top: 4px solid #4caf50;
+}
+.concept-card h3 { color: #1a5c32; font-size: 14px; margin-bottom: 8px; }
+.concept-card p  { font-size: 13px; line-height: 1.5; color: #333; }
+.concept-card .tag {
+  display: inline-block; background: #e8f5e9; color: #2d7d46;
+  font-size: 11px; font-weight: 700; border-radius: 4px;
+  padding: 2px 7px; margin-top: 8px;
+}
+
+/* ── Info boxes ── */
+.info-box {
+  background: #e8f5e9; border-left: 4px solid #4caf50;
+  border-radius: 0 8px 8px 0; padding: 12px 16px; margin: 12px 0;
+  font-size: 13px; line-height: 1.55;
+}
+.info-box strong { color: #1a5c32; }
+
+/* ── Process steps ── */
+.steps { display: flex; flex-direction: column; gap: 8px; margin: 12px 0; }
+.step {
+  display: flex; gap: 12px; align-items: flex-start;
+  background: white; border-radius: 8px; padding: 11px 14px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+.step-num {
+  background: #2d7d46; color: white; border-radius: 50%;
+  min-width: 28px; height: 28px; display: flex; align-items: center;
+  justify-content: center; font-size: 13px; font-weight: 700;
+}
+.step-text { font-size: 13px; line-height: 1.5; }
+.step-text strong { color: #1a5c32; }
+
+/* ── Comparison table ── */
+.compare-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13px; }
+.compare-table th {
+  background: #2d7d46; color: white; padding: 9px 12px; text-align: left;
+}
+.compare-table td { border: 1px solid #c8e6c9; padding: 8px 12px; }
+.compare-table tr:nth-child(even) td { background: #f1f8f1; }
+.compare-table tr:hover td { background: #e8f5e9; }
+
+/* ── Glossary ── */
+#glossary-search {
+  width: 100%; padding: 10px 14px; border: 2px solid #4caf50;
+  border-radius: 8px; font-size: 14px; font-family: Arial, sans-serif;
+  margin-bottom: 14px; outline: none;
+}
+#glossary-search:focus { border-color: #2d7d46; }
+.glossary-list { display: flex; flex-direction: column; gap: 8px; }
+.glossary-item {
+  background: white; border-radius: 8px; padding: 12px 16px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  border-left: 4px solid #4caf50; display: none;
+}
+.glossary-item.visible { display: block; }
+.glossary-item dt { font-weight: 700; color: #1a5c32; font-size: 14px; }
+.glossary-item dd { font-size: 13px; margin-top: 4px; color: #444; line-height: 1.5; }
+.glossary-item .sub { font-size: 11.5px; color: #888; margin-top: 2px; }
+
+/* ── Flashcards ── */
+.fc-controls {
+  display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; align-items: center;
+}
+.fc-select {
+  padding: 8px 12px; border: 2px solid #4caf50; border-radius: 8px;
+  font-family: Arial, sans-serif; font-size: 13px; background: white;
+  color: #1a1a1a; outline: none; cursor: pointer;
+}
+.fc-btn {
+  padding: 9px 20px; border: none; border-radius: 8px; cursor: pointer;
+  font-family: Arial, sans-serif; font-size: 13px; font-weight: 600;
+  background: #2d7d46; color: white; transition: background 0.2s;
+}
+.fc-btn:hover { background: #1a5c32; }
+.fc-btn.secondary { background: #81c784; color: #1a1a1a; }
+.fc-btn.secondary:hover { background: #4caf50; }
+
+.fc-area { perspective: 1000px; width: 100%; max-width: 540px; height: 220px; margin: 0 auto; }
+.fc-inner {
+  width: 100%; height: 100%; position: relative;
+  transform-style: preserve-3d; transition: transform 0.5s;
+}
+.fc-inner.flipped { transform: rotateY(180deg); }
+.fc-front, .fc-back {
+  position: absolute; width: 100%; height: 100%;
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  border-radius: 14px; display: flex; align-items: center;
+  justify-content: center; text-align: center; padding: 20px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.13);
+  cursor: pointer;
+}
+.fc-front { background: linear-gradient(135deg, #2d7d46, #4caf50); color: white; }
+.fc-back  { background: white; transform: rotateY(180deg); }
+.fc-front .fc-q { font-size: 16px; font-weight: 700; line-height: 1.4; }
+.fc-front .fc-hint { font-size: 11.5px; opacity: 0.75; margin-top: 10px; }
+.fc-back .fc-a { font-size: 15px; color: #1a1a1a; line-height: 1.5; }
+.fc-back .fc-hint2 { font-size: 11px; color: #888; margin-top: 10px; }
+
+.fc-nav { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 16px; }
+.fc-counter { font-size: 14px; color: #555; font-weight: 600; }
+.fc-prog { text-align: center; margin-top: 10px; }
+.fc-prog-bar { height: 6px; background: #c8e6c9; border-radius: 3px; overflow: hidden; }
+.fc-prog-fill { height: 100%; background: #2d7d46; border-radius: 3px; transition: width 0.4s; }
+
+/* ── Quiz ── */
+.quiz-controls {
+  display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; align-items: center;
+}
+.quiz-select {
+  padding: 9px 14px; border: 2px solid #4caf50; border-radius: 8px;
+  font-family: Arial, sans-serif; font-size: 13px; background: white; outline: none;
+}
+.quiz-btn {
+  padding: 10px 22px; border: none; border-radius: 8px; cursor: pointer;
+  font-family: Arial, sans-serif; font-size: 13.5px; font-weight: 700;
+  background: #2d7d46; color: white; transition: background 0.2s;
+}
+.quiz-btn:hover { background: #1a5c32; }
+.quiz-btn.danger { background: #c62828; }
+.quiz-btn.danger:hover { background: #8e0000; }
+
+.quiz-prog-bar { height: 8px; background: #c8e6c9; border-radius: 4px; overflow: hidden; margin-bottom: 18px; }
+.quiz-prog-fill { height: 100%; background: #4caf50; border-radius: 4px; transition: width 0.4s; }
+.quiz-info { font-size: 13px; color: #555; margin-bottom: 16px; }
+
+.quiz-q-box {
+  background: white; border-radius: 12px; padding: 22px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.09); margin-bottom: 16px;
+}
+.quiz-q-num { font-size: 11.5px; color: #4caf50; font-weight: 700; margin-bottom: 6px; text-transform: uppercase; }
+.quiz-q-diff { display: inline-block; font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 4px; margin-left: 8px; }
+.diff-easy   { background: #e8f5e9; color: #2d7d46; }
+.diff-medium { background: #fff8e1; color: #f57f17; }
+.diff-hard   { background: #fce4ec; color: #c62828; }
+.quiz-q-text { font-size: 15px; font-weight: 600; color: #1a1a1a; margin-bottom: 16px; line-height: 1.45; }
+
+.quiz-options { display: flex; flex-direction: column; gap: 9px; }
+.quiz-opt {
+  padding: 11px 16px; border: 2px solid #c8e6c9; border-radius: 8px;
+  cursor: pointer; font-size: 13.5px; background: white;
+  transition: border-color 0.15s, background 0.15s; text-align: left;
+  font-family: Arial, sans-serif; line-height: 1.4;
+}
+.quiz-opt:hover  { border-color: #4caf50; background: #f1f8f1; }
+.quiz-opt.correct { border-color: #2d7d46; background: #e8f5e9; color: #1a5c32; font-weight: 700; }
+.quiz-opt.wrong   { border-color: #c62828; background: #fce4ec; color: #c62828; }
+.quiz-opt:disabled { cursor: default; }
+
+.quiz-tf { display: flex; gap: 12px; }
+.quiz-tf-btn {
+  flex: 1; padding: 12px; border: 2px solid #c8e6c9; border-radius: 8px;
+  cursor: pointer; font-size: 15px; font-weight: 700; background: white;
+  font-family: Arial, sans-serif; transition: all 0.15s;
+}
+.quiz-tf-btn:hover { border-color: #4caf50; }
+.quiz-tf-btn.correct { border-color: #2d7d46; background: #e8f5e9; color: #1a5c32; }
+.quiz-tf-btn.wrong   { border-color: #c62828; background: #fce4ec; color: #c62828; }
+
+.quiz-feedback {
+  margin-top: 12px; padding: 10px 14px; border-radius: 8px; font-size: 13px; display: none;
+}
+.quiz-feedback.correct-fb { background: #e8f5e9; color: #1a5c32; border-left: 4px solid #2d7d46; }
+.quiz-feedback.wrong-fb   { background: #fce4ec; color: #c62828; border-left: 4px solid #c62828; }
+
+.quiz-nav { display: flex; gap: 10px; justify-content: flex-end; margin-top: 12px; }
+.quiz-nav-btn {
+  padding: 10px 24px; border: none; border-radius: 8px; cursor: pointer;
+  font-family: Arial, sans-serif; font-size: 13px; font-weight: 700;
+  background: #4caf50; color: white; transition: background 0.2s;
+}
+.quiz-nav-btn:hover { background: #2d7d46; }
+.quiz-nav-btn:disabled { background: #c8e6c9; cursor: default; }
+
+/* results */
+.quiz-results { text-align: center; padding: 30px 20px; }
+.quiz-results .score-ring {
+  width: 130px; height: 130px; border-radius: 50%; margin: 0 auto 20px;
+  border: 10px solid #c8e6c9; display: flex; align-items: center;
+  justify-content: center; flex-direction: column;
+  font-size: 26px; font-weight: 700; color: #1a5c32;
+}
+.quiz-results h2 { color: #1a5c32; font-size: 22px; margin-bottom: 8px; }
+.quiz-results p  { color: #444; font-size: 14px; margin-bottom: 20px; }
+.wrong-review { text-align: left; margin-top: 20px; }
+.wrong-item {
+  background: #fce4ec; border-left: 4px solid #c62828;
+  border-radius: 0 8px 8px 0; padding: 12px 16px; margin-bottom: 10px;
+}
+.wrong-item .wi-q  { font-size: 13.5px; font-weight: 700; color: #1a1a1a; margin-bottom: 5px; }
+.wrong-item .wi-ca { font-size: 13px; color: #1a5c32; }
+.wrong-item .wi-ya { font-size: 13px; color: #c62828; }
+
+/* misc */
+.badge {
+  display: inline-block; padding: 2px 9px; border-radius: 4px; font-size: 11px; font-weight: 700;
+  background: #e8f5e9; color: #2d7d46; margin-left: 6px;
+}
+.dna-diagram {
+  background: white; border-radius: 10px; padding: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin: 12px 0;
+  font-size: 13px; line-height: 1.6;
+}
+.dna-diagram h3 { color: #1a5c32; margin-bottom: 10px; font-size: 14px; }
+.base-pair { display: flex; align-items: center; gap: 8px; padding: 3px 0; }
+.base { width: 40px; text-align: center; padding: 3px 6px; border-radius: 4px; font-weight: 700; font-size: 12px; }
+.base-a { background: #ffcdd2; color: #c62828; }
+.base-t { background: #e1bee7; color: #6a1b9a; }
+.base-g { background: #c8e6c9; color: #1b5e20; }
+.base-c { background: #bbdefb; color: #0d47a1; }
+.base-bond { flex: 1; border-top: 2px dashed #ccc; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>&#127981; NaTech 9 &ndash; Kapitel 5: Genetik und Gentechnik verstehen</h1>
+  <p>Interaktive Lernhilfe &middot; Konzepte &middot; Glossar &middot; Lernk&auml;rtchen &middot; Quiz</p>
+</div>
+
+<div class="tab-bar" id="tabBar">
+  <button class="tab-btn active" onclick="showTab('konzepte',this)">&#128216; Konzepte</button>
+  <button class="tab-btn" onclick="showTab('zellen',this)">&#128300; Zellen &amp; Teilung</button>
+  <button class="tab-btn" onclick="showTab('dna',this)">&#129366; DNA</button>
+  <button class="tab-btn" onclick="showTab('genetik',this)">&#129514; Genetik</button>
+  <button class="tab-btn" onclick="showTab('gentechnik',this)">&#128300; Gentechnik</button>
+  <button class="tab-btn" onclick="showTab('glossar',this)">&#128218; Glossar</button>
+  <button class="tab-btn" onclick="showTab('karten',this)">&#127183; Lernk&auml;rtchen</button>
+  <button class="tab-btn" onclick="showTab('quiz',this)">&#127919; Quiz</button>
+</div>
+
+<!-- ════════════════════════════════════════════════════════ KONZEPTE -->
+<div class="tab-panel active" id="tab-konzepte">
+  <div class="section-title">&#127381; &Uuml;berblick Kapitel 5</div>
+  <div class="card-grid">
+    <div class="concept-card">
+      <h3>5.1 Genetik begegnet dir jeden Tag</h3>
+      <p>Genetik ist die Wissenschaft von Organisation und Weitergabe der Erbinformationen. Jedes Lebewesen beginnt aus einer einzigen Zelle &ndash; alle Eigenschaften sind in der Erbinformation dieser ersten Zelle enthalten.</p>
+      <span class="tag">Grundlagen</span>
+    </div>
+    <div class="concept-card">
+      <h3>5.2 Zellen geben Erbinformationen weiter</h3>
+      <p>Erbinformationen liegen auf Chromosomen im Zellkern. Menschliche Zellen haben 46 Chromosomen (23 Paare). Die Mitose kopiert Chromosomen und verteilt sie auf zwei Tochterzellen.</p>
+      <span class="tag">Zelle &amp; Teilung</span>
+    </div>
+    <div class="concept-card">
+      <h3>5.3 Die DNA tr&auml;gt die Erbinformationen</h3>
+      <p>Die DNA ist ein Doppelstrang aus vier Basen (A, T, G, C). A paart mit T, G mit C. Die Doppelhelix ist spiralf&ouml;rmig verdreht. Ein Gen ist ein DNA-Abschnitt, der den Bauplan f&uuml;r ein Protein enth&auml;lt.</p>
+      <span class="tag">DNA</span>
+    </div>
+    <div class="concept-card">
+      <h3>5.4 Ver&auml;nderungen der Erbinformationen</h3>
+      <p>Mutationen sind Ver&auml;nderungen der Erbinformationen. Sie entstehen durch chemische, physikalische oder biologische Ursachen, oder durch Kopierfehler. Die meisten Mutationen bleiben ohne Auswirkung.</p>
+      <span class="tag">Mutation</span>
+    </div>
+    <div class="concept-card">
+      <h3>5.5 Informationen nutzen</h3>
+      <p>Gene sind Baupläne f&uuml;r Proteine. Ein Gen wird in eine Kopie umgeschrieben, die den Zellkern verl&auml;sst. In der Zellfl&uuml;ssigkeit wird daraus eine Aminos&auml;urekette gebildet, die sich zu einem Protein faltet.</p>
+      <span class="tag">Vom Gen zum Protein</span>
+    </div>
+    <div class="concept-card">
+      <h3>5.6 Gentechnik</h3>
+      <p>Gentechnik ver&auml;ndert Erbinformationen gezielt. GVO = gentechnisch ver&auml;nderter Organismus. Anwendungen: Insulin-Produktion durch Bakterien, Krebstherapie (CAR-T-Zellen), CRISPR/Cas9 als pr&auml;zise Gen-Schere.</p>
+      <span class="tag">Biotechnologie</span>
+    </div>
+    <div class="concept-card">
+      <h3>5.7 Gen-Ethik</h3>
+      <p>Gentechnische Entscheidungen werden an drei Wertvorstellungen gemessen: <strong>Menschenw&uuml;rde</strong> (Selbstbestimmung), <strong>Verantwortung</strong> (k&uuml;nftige Risiken bedenken), <strong>Gl&uuml;ck</strong> (Wohlergehen aller).</p>
+      <span class="tag">Ethik</span>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════ ZELLEN -->
+<div class="tab-panel" id="tab-zellen">
+  <div class="section-title">Pflanzliche vs. tierische Zelle</div>
+  <table class="compare-table">
+    <tr><th>Bestandteil</th><th>Pflanzliche Zelle</th><th>Tierische Zelle</th><th>Funktion</th></tr>
+    <tr><td>Zellmembran</td><td>&#10003;</td><td>&#10003;</td><td>Begrenzung der Zelle</td></tr>
+    <tr><td>Zellkern</td><td>&#10003;</td><td>&#10003;</td><td>Enth&auml;lt Erbinformationen</td></tr>
+    <tr><td>Zellfl&uuml;ssigkeit</td><td>&#10003;</td><td>&#10003;</td><td>Ort des Proteinaufbaus &amp; Stoffwechsel</td></tr>
+    <tr><td>Mitochondrien</td><td>&#10003;</td><td>&#10003;</td><td>Zellatmung, Energiebereitstellung</td></tr>
+    <tr><td>Zellwand</td><td>&#10003;</td><td>&#10007;</td><td>H&auml;lt Form und gibt Stabilit&auml;t</td></tr>
+    <tr><td>Vakuole</td><td>&#10003; (gro&szlig;)</td><td>&#10007; / klein</td><td>Speichert N&auml;hrstoffe, h&auml;lt Innendruck</td></tr>
+    <tr><td>Blattgr&uuml;nkorn (Chloroplast)</td><td>&#10003;</td><td>&#10007;</td><td>Fotosynthese (CO&#8322; + H&#8322;O &rarr; Traubenzucker)</td></tr>
+  </table>
+
+  <div class="section-title">Die Mitose &ndash; 5 Schritte</div>
+  <div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-text"><strong>Chromosomen verdoppeln:</strong> 1-Chromatid-Chromosomen werden zu 2-Chromatiden-Chromosomen. Erbinformationen werden kopiert.</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-text"><strong>Aufwickeln:</strong> Chromosomen werden k&uuml;rzer und dicker (X-Form sichtbar). Zellkern l&ouml;st sich auf.</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-text"><strong>Aufreihen:</strong> Chromosomen wandern in die Zellmitte. Pol-Fasern bilden sich und binden sich an die Chromosomen.</div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-text"><strong>Chromatiden trennen:</strong> Pol-Fasern ziehen je ein Chromatid zu einem Zellpol. Jeder Pol erh&auml;lt identische Erbinformationen.</div></div>
+    <div class="step"><div class="step-num">5</div><div class="step-text"><strong>Zellteilung:</strong> Kernh&uuml;llen bilden sich neu. Zwei Tochterzellen entstehen, jede mit 46 1-Chromatid-Chromosomen.</div></div>
+  </div>
+
+  <div class="section-title">Chromosomen und Karyogramm</div>
+  <div class="info-box">
+    <strong>Karyogramm:</strong> Bild aller Chromosomen einer Zelle, paarweise angeordnet. Menschen haben 23 Chromosomenpaare (total 46). Chromosom 23 bestimmt das Geschlecht: XX = weiblich, XY = m&auml;nnlich.<br><br>
+    <strong>Trisomie 21 (Down-Syndrom):</strong> Chromosom 21 ist dreimal vorhanden statt zweimal. Ursache: Fehler bei der Meiose. Folgen: langsamere intellektuelle Entwicklung, m&ouml;gliche Herzfehler.
+  </div>
+
+  <div class="section-title">Meiose vs. Mitose</div>
+  <table class="compare-table">
+    <tr><th>Merkmal</th><th>Mitose</th><th>Meiose</th></tr>
+    <tr><td>Zweck</td><td>K&ouml;rperwachstum, Wundheilung</td><td>Bildung von Geschlechtszellen</td></tr>
+    <tr><td>Tochterzellen</td><td>2 identische Zellen</td><td>4 verschiedene Zellen</td></tr>
+    <tr><td>Chromosomenzahl</td><td>46 (gleich wie Mutterzelle)</td><td>23 (halbiert)</td></tr>
+    <tr><td>Teilungsschritte</td><td>1 Teilung</td><td>2 Teilungen</td></tr>
+  </table>
+</div>
+
+<!-- ════════════════════════════════════════════════════════ DNA -->
+<div class="tab-panel" id="tab-dna">
+  <div class="section-title">Aufbau der DNA</div>
+  <div class="info-box">
+    DNA = <strong>D</strong>eoxyribo<strong>N</strong>ucleic <strong>A</strong>cid (Desoxyribonukleins&auml;ure). Jeder DNA-Baustein besteht aus einem Phosphors&auml;ure-Rest (P), einem Zucker-Molek&uuml;l (Z) und einer von vier Basen.
+  </div>
+
+  <div class="dna-diagram">
+    <h3>Die vier DNA-Basen und ihre Paarungsregeln</h3>
+    <div class="base-pair">
+      <span class="base base-a">A</span>
+      <span style="font-size:12px;color:#888;">Adenin</span>
+      <div class="base-bond"></div>
+      <span style="font-size:12px;color:#888;">Thymin</span>
+      <span class="base base-t">T</span>
+    </div>
+    <div class="base-pair">
+      <span class="base base-g">G</span>
+      <span style="font-size:12px;color:#888;">Guanin</span>
+      <div class="base-bond"></div>
+      <span style="font-size:12px;color:#888;">Cytosin</span>
+      <span class="base base-c">C</span>
+    </div>
+    <p style="margin-top:12px;font-size:13px;color:#555;">&#8680; A paart immer mit T &bull; G paart immer mit C &bull; Diese Komplementarr&auml;gel gilt f&uuml;r alle Lebewesen</p>
+  </div>
+
+  <div class="card-grid">
+    <div class="concept-card">
+      <h3>DNA-Doppelstrang</h3>
+      <p>Zwei DNA-Str&auml;nge liegen einander gegen&uuml;ber. Phosphors&auml;ure-Reste und Zucker bilden das &laquo;Ger&uuml;st&raquo; (Strickleiter-Stricke), die Basenpaare die &laquo;Sprossen&raquo;.</p>
+    </div>
+    <div class="concept-card">
+      <h3>Doppelhelix</h3>
+      <p>Der Doppelstrang ist zus&auml;tzlich spiralf&ouml;rmig verdreht. Watson und Crick beschrieben diese Struktur 1953. Die DNA einer Zelle w&auml;re &sim;2 Meter lang &ndash; aber nur nm d&uuml;nn.</p>
+    </div>
+    <div class="concept-card">
+      <h3>DNA-Verdopplung</h3>
+      <p>Vor der Zellteilung trennt ein Enzym die Basispaare auf. An jeden Einzelstrang lagern sich neue DNA-Bausteine an (A mit T, G mit C). Es entstehen zwei identische Doppelstr&auml;nge.</p>
+    </div>
+    <div class="concept-card">
+      <h3>Gen</h3>
+      <p>Ein kleines St&uuml;ck auf der DNA, das den Bauplan f&uuml;r ein Protein tr&auml;gt. Der Mensch hat ca. 20 000&ndash;25 000 Gene. Gene bestimmen z.B. Augenfarbe, Blutgruppe, Enzymproduktion.</p>
+    </div>
+  </div>
+
+  <div class="section-title">Vom Gen zum Protein</div>
+  <div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-text"><strong>Start:</strong> Spezielle Proteine geben das Signal zum Ablesen eines Gens.</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-text"><strong>Kopieren:</strong> Eine Kopie des DNA-Abschnitts (mRNA) wird im Zellkern erstellt.</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-text"><strong>Verschieben:</strong> Die Kopie verlässt den Zellkern und gelangt in die Zellfl&uuml;ssigkeit.</div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-text"><strong>&Uuml;bersetzen:</strong> Die Bauanleitung wird gelesen und in eine Aminos&auml;urekette &uuml;bersetzt (je 3 Basen = 1 Aminos&auml;ure).</div></div>
+    <div class="step"><div class="step-num">5</div><div class="step-text"><strong>Falten:</strong> Die Aminos&auml;urekette faltet sich zum funktionsf&auml;higen Protein.</div></div>
+  </div>
+
+  <div class="section-title">Genetischer Code</div>
+  <div class="info-box">
+    <strong>Basen-Triplett:</strong> Immer 3 Basen codieren eine Aminos&auml;ure. Es gibt 64 m&ouml;gliche Tripletts f&uuml;r 20 Aminos&auml;uren + Start (ATG) + Stopp-Codes (3 Codes).<br><br>
+    <strong>Universeller Code:</strong> Alle Lebewesen &ndash; von Bakterien bis Menschen &ndash; verwenden denselben genetischen Code. Das macht Gentechnik (Art-fremde Gene einbauen) m&ouml;glich.
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════ GENETIK -->
+<div class="tab-panel" id="tab-genetik">
+  <div class="section-title">Mendels Erbregeln</div>
+  <div class="card-grid">
+    <div class="concept-card">
+      <h3>Wichtige Begriffe</h3>
+      <p><strong>Dominant:</strong> Genvariante, die bevorzugt wird &ndash; Gro&szlig;buchstabe (S)<br>
+      <strong>Rezessiv:</strong> Genvariante, die unterdr&uuml;ckt wird &ndash; Kleinbuchstabe (s)<br>
+      <strong>Reinerbig:</strong> Beide Genvarianten gleich (SS oder ss)<br>
+      <strong>Mischerbig:</strong> Zwei verschiedene Varianten (Ss)</p>
+    </div>
+    <div class="concept-card">
+      <h3>1. Mendelsche Regel: Uniformit&auml;tsregel</h3>
+      <p>Kreuzt man zwei <em>reinerbige</em> Lebewesen (SS &times; ss), sind alle Nachkommen der 1. Generation mischerbig (Ss) und sehen gleich aus (dominant).</p>
+    </div>
+    <div class="concept-card">
+      <h3>2. Mendelsche Regel: Spaltungsregel</h3>
+      <p>Kreuzt man zwei <em>mischerbige</em> Lebewesen (Ss &times; Ss), spaltet sich das Aussehen der Nachkommen im Verh&auml;ltnis 3:1 (3 dominant : 1 rezessiv).</p>
+    </div>
+    <div class="concept-card">
+      <h3>3. Mendelsche Regel: Unabh&auml;ngigkeitsregel</h3>
+      <p>Merkmale auf verschiedenen Chromosomen werden unabh&auml;ngig voneinander vererbt. Dadurch entstehen neue Merkmalskombinationen in den Nachkommen.</p>
+    </div>
+  </div>
+
+  <div class="section-title">Kreuzungsschema (Beispiel Fellfarbe bei Katzen)</div>
+  <div class="info-box">
+    S = einfarbig (dominant) &nbsp;|&nbsp; s = scheckig (rezessiv)<br><br>
+    <strong>Eltern:</strong> SS (reinerbig einfarbig) &times; ss (reinerbig scheckig)<br>
+    <strong>Geschlechtszellen:</strong> S, S &nbsp;|&nbsp; s, s<br>
+    <strong>Nachkommen:</strong> Ss, Ss, Ss, Ss &rarr; alle mischerbig einfarbig (1. Mendelsche Regel)<br><br>
+    <strong>2. Generation:</strong> Ss &times; Ss<br>
+    <strong>Nachkommen:</strong> SS, Ss, Ss, ss &rarr; Verh&auml;ltnis 3 einfarbig : 1 scheckig (2. Mendelsche Regel)
+  </div>
+
+  <div class="section-title">Ver&auml;nderungen der Erbinformationen</div>
+  <table class="compare-table">
+    <tr><th>Mutationsursache</th><th>Beispiel</th></tr>
+    <tr><td>Chemisch</td><td>Stoffe aus Abgasen, bestimmte Chemikalien</td></tr>
+    <tr><td>Physikalisch</td><td>UV-Strahlung, R&ouml;ntgenstrahlen, Radioaktivit&auml;t</td></tr>
+    <tr><td>Biologisch</td><td>Bestimmte Viren</td></tr>
+    <tr><td>Kopierfehler</td><td>Fehler bei der DNA-Verdopplung oder Zellteilung</td></tr>
+  </table>
+</div>
+
+<!-- ════════════════════════════════════════════════════════ GENTECHNIK -->
+<div class="tab-panel" id="tab-gentechnik">
+  <div class="section-title">Was ist Gentechnik?</div>
+  <div class="info-box">
+    <strong>Gentechnik</strong> umfasst alle Methoden, die Erbinformationen gezielt ver&auml;ndern. Ver&auml;nderte Lebewesen werden <strong>GVO</strong> (gentechnisch ver&auml;nderter Organismus) genannt. Der universelle genetische Code macht es m&ouml;glich, Gene von einer Art in eine andere einzubauen.
+  </div>
+
+  <div class="section-title">Insulin-Herstellung durch Bakterien</div>
+  <div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-text">Das Insulin-Gen wird aus menschlicher DNA herausgeschnitten.</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-text">Das Insulin-Gen wird f&uuml;r den Einbau in ein Plasmid vorbereitet.</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-text">Das Plasmid (ringf&ouml;rmige DNA) wird aus einem Bakterium entnommen und ge&ouml;ffnet.</div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-text">Das Insulin-Gen wird in das Plasmid eingebaut (Plasmid = &laquo;Gen-Taxi&raquo;).</div></div>
+    <div class="step"><div class="step-num">5</div><div class="step-text">Das ver&auml;nderte Plasmid wird in ein Bakterium eingebaut.</div></div>
+    <div class="step"><div class="step-num">6</div><div class="step-text">Die Bakterien werden vermehrt und produzieren menschliches Insulin.</div></div>
+  </div>
+
+  <div class="section-title">CRISPR/Cas9 &ndash; Die Gen-Schere</div>
+  <div class="card-grid">
+    <div class="concept-card">
+      <h3>Was ist CRISPR/Cas9?</h3>
+      <p>Eine pr&auml;zise Methode zum Schneiden und Ver&auml;ndern von DNA. Entdeckt 2012 von Jennifer Doudna und Emmanuelle Charpentier (Chemie-Nobelpreis 2020).</p>
+    </div>
+    <div class="concept-card">
+      <h3>Genome-Editing</h3>
+      <p>Mit CRISPR/Cas9 kann die DNA genau an der gew&uuml;nschten Stelle geschnitten werden. Einzelne Basen k&ouml;nnen ge&auml;ndert, oder ganze Gene eingebaut oder entfernt werden.</p>
+    </div>
+    <div class="concept-card">
+      <h3>Chancen</h3>
+      <p>Heilung von Erbkrankheiten (z.B. Sichelzellenan&auml;mie), Krebstherapie (CAR-T-Zellen), widerstandsf&auml;higere Pflanzen, Malaria-Bek&auml;mpfung.</p>
+    </div>
+    <div class="concept-card">
+      <h3>Risiken</h3>
+      <p>Unbeabsichtigte Mutationen, unkontrollierte Ausbreitung (Gene Drive), Missbrauch (Designer-Babys), schwer regulierbar da einfach und g&uuml;nstig.</p>
+    </div>
+  </div>
+
+  <div class="section-title">Gr&uuml;ne Gentechnik (Beispiel Gen-Mais)</div>
+  <table class="compare-table">
+    <tr><th>Maissorte</th><th>Ver&auml;nderung</th><th>Vorteil</th><th>Nachteil</th></tr>
+    <tr><td>Genuity&reg; DraughtGard</td><td>Trockenresistenz</td><td>+7% Ertrag in D&uuml;rreregionen</td><td>Gentechn. Risiken</td></tr>
+    <tr><td>Bt-Mais</td><td>Gift gegen Maiszünsler</td><td>Weniger Pestizide n&ouml;tig</td><td>T&ouml;tet auch andere Insekten, Resistenzbildung</td></tr>
+    <tr><td>RoundUp Ready 2</td><td>Herbizid-Resistenz</td><td>Aggressives Unkrautmittel einsetzbar</td><td>Abh&auml;ngigkeit vom Hersteller, krebsverd&auml;chtig</td></tr>
+  </table>
+
+  <div class="section-title">Gen-Ethik: Drei Wertvorstellungen</div>
+  <div class="card-grid">
+    <div class="concept-card">
+      <h3>&#9878; Menschenw&uuml;rde</h3>
+      <p>Ein Vorhaben ist nur erlaubt, wenn die Menschenw&uuml;rde aller Beteiligten und ihr Recht auf Selbstbestimmung nicht verletzt werden und niemand instrumentalisiert wird.</p>
+    </div>
+    <div class="concept-card">
+      <h3>&#9888; Verantwortung</h3>
+      <p>K&uuml;nftige Risiken m&uuml;ssen bedacht werden. Es ist unsere Pflicht, rechtzeitig k&uuml;nftige Sch&auml;den zu verhindern, auch wenn nicht sicher ist, ob sie eintreten werden.</p>
+    </div>
+    <div class="concept-card">
+      <h3>&#128522; Gl&uuml;ck</h3>
+      <p>Ein Vorhaben ist moralisch erlaubt, wenn dadurch das Gl&uuml;ck aller Betroffenen am gr&ouml;&szlig;ten wird und der Schmerz aller so klein wie m&ouml;glich bleibt.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════ GLOSSAR -->
+<div class="tab-panel" id="tab-glossar">
+  <input type="text" id="glossary-search" placeholder="&#128269; Begriff suchen..." oninput="filterGlossary(this.value)">
+  <div class="glossary-list" id="glossaryList"></div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════ KARTEN -->
+<div class="tab-panel" id="tab-karten">
+  <div class="fc-controls">
+    <select class="fc-select" id="fcTopic" onchange="initFlashcards()">
+      <option value="all">Alle Themen</option>
+      <option value="zellen">Zellen &amp; Teilung</option>
+      <option value="dna">DNA &amp; Gene</option>
+      <option value="genetik">Mendel &amp; Genetik</option>
+      <option value="gentechnik">Gentechnik &amp; Ethik</option>
+    </select>
+    <button class="fc-btn secondary" onclick="initFlashcards()">&#8635; Mischen</button>
+    <button class="fc-btn" onclick="flipCard()">Umdrehen</button>
+  </div>
+
+  <div class="fc-area" onclick="flipCard()">
+    <div class="fc-inner" id="fcInner">
+      <div class="fc-front"><div><div class="fc-q" id="fcQuestion">Lade...</div><div class="fc-hint">Klicken zum Umdrehen</div></div></div>
+      <div class="fc-back"><div><div class="fc-a" id="fcAnswer"></div><div class="fc-hint2">Klicken zum Weiterbl&auml;ttern</div></div></div>
+    </div>
+  </div>
+
+  <div class="fc-nav">
+    <button class="fc-btn secondary" onclick="prevCard()">&#8592; Zur&uuml;ck</button>
+    <span class="fc-counter" id="fcCounter">1 / ?</span>
+    <button class="fc-btn" onclick="nextCard()">Weiter &#8594;</button>
+  </div>
+  <div class="fc-prog" style="margin-top:14px;">
+    <div class="fc-prog-bar"><div class="fc-prog-fill" id="fcProgFill" style="width:0%"></div></div>
+    <p style="font-size:12px;color:#888;margin-top:6px;" id="fcProgText"></p>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════ QUIZ -->
+<div class="tab-panel" id="tab-quiz">
+  <div id="quizSetup">
+    <div class="quiz-controls">
+      <select class="quiz-select" id="qTopic">
+        <option value="all">Alle Themen</option>
+        <option value="zellen">Zellen &amp; Teilung (5.1/5.2)</option>
+        <option value="dna">DNA &amp; Gene (5.3/5.5)</option>
+        <option value="genetik">Genetik &amp; Mutation (5.4/5.7 Mendel)</option>
+        <option value="gentechnik">Gentechnik &amp; Ethik (5.6/5.7)</option>
+      </select>
+      <select class="quiz-select" id="qDiff">
+        <option value="all">Alle Schwierigkeiten</option>
+        <option value="easy">Leicht</option>
+        <option value="medium">Mittel</option>
+        <option value="hard">Schwer</option>
+      </select>
+      <select class="quiz-select" id="qCount">
+        <option value="10">10 Fragen</option>
+        <option value="20">20 Fragen</option>
+        <option value="all">Alle Fragen</option>
+      </select>
+      <button class="quiz-btn" onclick="startQuiz()">&#127919; Quiz starten</button>
+    </div>
+    <div class="info-box">
+      <strong>So funktioniert der Quiz:</strong> W&auml;hle ein Thema und einen Schwierigkeitsgrad. Beantworte alle Fragen und sieh dir danach dein Ergebnis und die Fehlerfragen an. Viel Erfolg!
+    </div>
+  </div>
+
+  <div id="quizArea" style="display:none;">
+    <div class="quiz-prog-bar"><div class="quiz-prog-fill" id="qProgFill" style="width:0%"></div></div>
+    <div class="quiz-info" id="qInfo"></div>
+    <div class="quiz-q-box" id="qBox"></div>
+    <div class="quiz-nav">
+      <button class="quiz-nav-btn" id="qNextBtn" onclick="nextQuestion()" disabled>Weiter &#8594;</button>
+    </div>
+  </div>
+
+  <div id="quizResults" style="display:none;"></div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════════════════════
+// TAB NAVIGATION
+// ════════════════════════════════════════════════════════════════════════
+function showTab(id, btn) {
+  var panels = document.querySelectorAll('.tab-panel');
+  var btns   = document.querySelectorAll('.tab-btn');
+  for (var i = 0; i < panels.length; i++) panels[i].classList.remove('active');
+  for (var i = 0; i < btns.length; i++)   btns[i].classList.remove('active');
+  document.getElementById('tab-' + id).classList.add('active');
+  if (btn) btn.classList.add('active');
+  if (id === 'karten') initFlashcards();
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// GLOSSARY DATA
+// ════════════════════════════════════════════════════════════════════════
+var glossaryData = [
+  { term: 'Adenin (A)', def: 'Eine der vier DNA-Basen. Paart mit Thymin (T).', topic: 'dna' },
+  { term: 'Allel', def: 'Synonym f\u00fcr Genvariante \u2013 die verschiedenen Auspr\u00e4gungen eines Gens (z.B. S oder s f\u00fcr Fellfarbe).', topic: 'genetik' },
+  { term: 'Aminosäure', def: 'Baustein von Proteinen. Je 3 Basen (Triplett) codieren eine Aminos\u00e4ure. 20 verschiedene Aminos\u00e4uren gibt es beim Menschen.', topic: 'dna' },
+  { term: 'Blattgrünkorn (Chloroplast)', def: 'Organell in Pflanzenzellen, in dem die Fotosynthese abl\u00e4uft: CO\u2082 + H\u2082O \u2192 Traubenzucker + O\u2082.', topic: 'zellen' },
+  { term: 'CAR-T-Zell-Therapie', def: 'Krebstherapie: eigene T-Zellen werden gentechnisch ver\u00e4ndert, damit sie Krebszellen besser erkennen und zerst\u00f6ren.', topic: 'gentechnik' },
+  { term: 'Chromatid', def: 'Einer der zwei gleichen DNA-F\u00e4den eines 2-Chromatiden-Chromosoms nach der DNA-Verdopplung.', topic: 'zellen' },
+  { term: 'Chromosom', def: 'Fadenf\u00f6rmige Struktur im Zellkern aus DNA und Proteinen. Menschen haben 46 Chromosomen in jeder K\u00f6rperzelle.', topic: 'zellen' },
+  { term: 'CRISPR/Cas9', def: 'Pr\u00e4zise Gen-Schere, entdeckt 2012. Erm\u00f6glicht gezielte Ver\u00e4nderung der DNA an gew\u00fcnschter Stelle. Nobelpreis 2020.', topic: 'gentechnik' },
+  { term: 'Cytosin (C)', def: 'Eine der vier DNA-Basen. Paart mit Guanin (G).', topic: 'dna' },
+  { term: 'DNA (Desoxyribonukleinsäure)', def: 'Langes Molek\u00fcl, das aus vier Bausteinen (A, T, G, C) besteht und alle Erbinformationen speichert. Struktur: Doppelhelix.', topic: 'dna' },
+  { term: 'Dominant', def: 'Genvariante, die gegen\u00fcber einer anderen bevorzugt wird und die Merkmalauspr\u00e4gung bestimmt. Gro\u00dfbuchstabe (S).', topic: 'genetik' },
+  { term: 'Doppelhelix', def: 'Die spiralf\u00f6rmig verdrehte Struktur des DNA-Doppelstrangs. Beschrieben von Watson und Crick 1953.', topic: 'dna' },
+  { term: 'Enzym', def: 'Protein, das als biologischer Katalysator Reaktionen beschleunigt. Wichtig bei DNA-Verdopplung, Stoffwechsel und Genwirkketten.', topic: 'dna' },
+  { term: 'Gen', def: 'Abschnitt der DNA, der den Bauplan f\u00fcr ein Protein tr\u00e4gt. Bestimmt Merkmale wie Augenfarbe oder Blutgruppe.', topic: 'dna' },
+  { term: 'Gen-Diagnostik', def: 'Untersuchung von Genen auf Eigenschaften oder Krankheiten. Kann bei Embryonen eingesetzt werden (PID = Pr\u00e4implantations-Diagnostik).', topic: 'gentechnik' },
+  { term: 'Genetik', def: 'Wissenschaft von der Organisation und Weitergabe der Erbinformationen.', topic: 'dna' },
+  { term: 'Genetischer Code', def: 'Regeln, nach denen Basen-Tripletts Aminos\u00e4uren bestimmen. Ist universell \u2013 gilt f\u00fcr alle Lebewesen gleich.', topic: 'dna' },
+  { term: 'Gentechnik', def: 'Alle Methoden, die Erbinformationen von Lebewesen gezielt ver\u00e4ndern. Erzeugt GVO (gentechnisch ver\u00e4nderte Organismen).', topic: 'gentechnik' },
+  { term: 'Genom-Editing', def: 'Gezieltes Ver\u00e4ndern der DNA an einer bestimmten Stelle. M\u00f6glich mit CRISPR/Cas9.', topic: 'gentechnik' },
+  { term: 'Geschlechtszellen', def: 'Eizellen und Spermien. Sie haben nur 23 Chromosomen (einfacher Satz). Entstehen durch Meiose.', topic: 'zellen' },
+  { term: 'Guanin (G)', def: 'Eine der vier DNA-Basen. Paart mit Cytosin (C).', topic: 'dna' },
+  { term: 'GVO', def: 'Gentechnisch ver\u00e4nderter Organismus \u2013 Pflanze, Tier, Bakterium oder Pilz, dessen Erbgut gezielt ver\u00e4ndert wurde.', topic: 'gentechnik' },
+  { term: 'Karyogramm', def: 'Bild aller Chromosomen einer Zelle, paarweise nach Gr\u00f6\u00dfe geordnet. Zeigt z.B. Trisomie 21 (3 Chromosomen beim Paar 21).', topic: 'zellen' },
+  { term: 'Klon', def: 'Lebewesen mit identischen Erbinformationen wie ein anderes. Entsteht durch Kerntransfer (nicht durch normale Fortpflanzung).', topic: 'gentechnik' },
+  { term: 'Meiose', def: '2-stufige Kernteilung zur Bildung von Geschlechtszellen. Ergebnis: 4 Zellen mit je 23 Chromosomen (halbierter Satz).', topic: 'zellen' },
+  { term: 'Menschenwürde', def: 'Ethische Wertvorstellung: Ein Vorhaben ist nur erlaubt, wenn kein Mensch instrumentalisiert und die Selbstbestimmung respektiert wird.', topic: 'gentechnik' },
+  { term: 'Merkmal', def: 'Eigenschaft eines Lebewesens (z.B. Fellfarbe, Blutgruppe, Augenfarbe), die durch Gene beeinflusst wird.', topic: 'genetik' },
+  { term: 'Mischerbig (heterozygot)', def: 'Ein Lebewesen hat f\u00fcr ein Merkmal zwei verschiedene Genvarianten (z.B. Ss).', topic: 'genetik' },
+  { term: 'Mitochondrien', def: 'Organellen in tierischen und pflanzlichen Zellen, in denen die Zellatmung abl\u00e4uft (Energiebereitstellung).', topic: 'zellen' },
+  { term: 'Mitose', def: '1-stufige Kernteilung zur K\u00f6rperzellteilung. Ergebnis: 2 identische Tochterzellen mit je 46 Chromosomen.', topic: 'zellen' },
+  { term: 'Mutation', def: 'Ver\u00e4nderung der Erbinformationen. Kann durch chemische, physikalische, biologische Ursachen oder Kopierfehler entstehen.', topic: 'genetik' },
+  { term: 'Plasmid', def: 'Ringf\u00f6rmige, kleine DNA in Bakterien. Wird als "Gen-Taxi" genutzt, um Gene in Bakterien einzubauen (z.B. Insulin-Gen).', topic: 'gentechnik' },
+  { term: 'Protein', def: 'Stoff, den Zellen nach dem Bauplan eines Gens herstellen. Proteine steuern fast alle Lebensfunktionen (als Enzyme, Antik\u00f6rper, Hormone).', topic: 'dna' },
+  { term: 'Reinerbig (homozygot)', def: 'Ein Lebewesen hat f\u00fcr ein Merkmal zwei gleiche Genvarianten (z.B. SS oder ss).', topic: 'genetik' },
+  { term: 'Rezessiv', def: 'Genvariante, die gegen\u00fcber einer anderen nicht bevorzugt wird. Kommt nur zur Auspr\u00e4gung, wenn beide Varianten rezessiv sind. Kleinbuchstabe (s).', topic: 'genetik' },
+  { term: 'Thymin (T)', def: 'Eine der vier DNA-Basen. Paart mit Adenin (A).', topic: 'dna' },
+  { term: 'Trisomie', def: 'Ein Chromosom liegt dreimal statt zweimal vor. Trisomie 21 = Down-Syndrom.', topic: 'zellen' },
+  { term: 'Vakuole', def: 'Organell in Pflanzenzellen. Speichert N\u00e4hrstoffe und Farbstoffe, h\u00e4lt den Zelleninnendruck aufrecht.', topic: 'zellen' },
+  { term: 'Zellkern', def: 'Schaltzentrale der Zelle. Enth\u00e4lt die Chromosomen mit den Erbinformationen. Steuert alle Lebensfunktionen.', topic: 'zellen' },
+  { term: 'Zellmembran', def: 'Begrenzung der Zelle nach au\u00dfen. Regelt den Stoffaustausch. Vorhanden in allen Zelltypen.', topic: 'zellen' },
+  { term: 'Zellwand', def: 'Festes Gerüst um Pflanzenzellen (zus\u00e4tzlich zur Zellmembran). H\u00e4lt Form und gibt Stabilit\u00e4t.', topic: 'zellen' }
+];
+
+function buildGlossary() {
+  var sorted = glossaryData.slice().sort(function(a, b) { return a.term.localeCompare(b.term, 'de'); });
+  var container = document.getElementById('glossaryList');
+  container.innerHTML = '';
+  for (var i = 0; i < sorted.length; i++) {
+    var item = document.createElement('dl');
+    item.className = 'glossary-item visible';
+    item.setAttribute('data-term', sorted[i].term.toLowerCase());
+    item.setAttribute('data-def', sorted[i].def.toLowerCase());
+    item.innerHTML = '<dt>' + sorted[i].term + '</dt><dd>' + sorted[i].def + '</dd>';
+    container.appendChild(item);
+  }
+}
+
+function filterGlossary(val) {
+  var items = document.querySelectorAll('.glossary-item');
+  var q = val.toLowerCase();
+  for (var i = 0; i < items.length; i++) {
+    var t = items[i].getAttribute('data-term') || '';
+    var d = items[i].getAttribute('data-def') || '';
+    if (t.indexOf(q) >= 0 || d.indexOf(q) >= 0) {
+      items[i].classList.add('visible');
+    } else {
+      items[i].classList.remove('visible');
+    }
+  }
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// FLASHCARD DATA
+// ════════════════════════════════════════════════════════════════════════
+var flashcardData = [
+  // ZELLEN
+  { q: 'Welche Zellbestandteile haben nur Pflanzenzellen, nicht tierische Zellen?', a: 'Zellwand, Blattgr\u00fcnkorn (Chloroplast) und eine gro\u00dfe Vakuole.', topic: 'zellen' },
+  { q: 'Was ist die Funktion des Zellkerns?', a: 'Er enth\u00e4lt die Erbinformationen auf den Chromosomen und steuert alle Lebensfunktionen der Zelle.', topic: 'zellen' },
+  { q: 'Was l\u00e4uft in den Mitochondrien ab?', a: 'Die Zellatmung \u2013 energiereiche Stoffe werden bereitgestellt.', topic: 'zellen' },
+  { q: 'Wie viele Chromosomen hat eine menschliche K\u00f6rperzelle?', a: '46 Chromosomen (23 Paare \u2013 je eines von Mutter und Vater).', topic: 'zellen' },
+  { q: 'Was ist ein Karyogramm?', a: 'Ein Bild aller Chromosomen einer Zelle, paarweise nach Gr\u00f6\u00dfe geordnet.', topic: 'zellen' },
+  { q: 'Nenne die 5 Schritte der Mitose in der richtigen Reihenfolge.', a: '1. Chromosomen verdoppeln \u2192 2. Aufwickeln (Zellkern l\u00f6st sich) \u2192 3. Aufreihen in der Mitte \u2192 4. Chromatiden trennen \u2192 5. Zelle teilt sich.', topic: 'zellen' },
+  { q: 'Was ist der Unterschied zwischen Mitose und Meiose?', a: 'Mitose: 2 identische Tochterzellen mit 46 Chromosomen (K\u00f6rperteilung). Meiose: 4 verschiedene Tochterzellen mit 23 Chromosomen (Geschlechtszellen).', topic: 'zellen' },
+  { q: 'Was ist Trisomie 21?', a: 'Das Chromosom 21 ist dreimal statt zweimal vorhanden \u2013 auch Down-Syndrom genannt. Ursache ist ein Fehler bei der Meiose.', topic: 'zellen' },
+  // DNA
+  { q: 'Wof\u00fcr steht DNA?', a: 'DNA = Deoxyribonucleic Acid (Desoxyribonukleins\u00e4ure / DNS).', topic: 'dna' },
+  { q: 'Welche vier Basen kommen in der DNA vor und wie paaren sie sich?', a: 'Adenin (A) \u2013 Thymin (T) | Guanin (G) \u2013 Cytosin (C). Diese Paare sind immer fest.', topic: 'dna' },
+  { q: 'Was ist eine Doppelhelix?', a: 'Die spiralf\u00f6rmig verdrehte Struktur des DNA-Doppelstrangs. Beschrieben von Watson und Crick (1953).', topic: 'dna' },
+  { q: 'Was ist ein Gen?', a: 'Ein Abschnitt der DNA, der den Bauplan f\u00fcr ein bestimmtes Protein enth\u00e4lt.', topic: 'dna' },
+  { q: 'Wie wird die DNA verdoppelt?', a: 'Ein Enzym trennt die Basenbindungen. An jedem Einzelstrang lagern sich neue Bausteine an (A\u2192T, G\u2192C). Es entstehen zwei identische Doppelstr\u00e4nge.', topic: 'dna' },
+  { q: 'Beschreibe den Weg vom Gen zum Protein (5 Schritte).', a: '1. Start: Signal zum Abschreiben. 2. Kopieren: mRNA-Kopie im Zellkern. 3. Verschieben: mRNA verl\u00e4sst Zellkern. 4. \u00dcbersetzen: Aminos\u00e4urekette aufbauen. 5. Falten: Protein entsteht.', topic: 'dna' },
+  { q: 'Was ist der genetische Code?', a: 'Immer 3 aufeinanderfolgende Basen (Triplett) codieren eine Aminos\u00e4ure. Der Code ist universell \u2013 gilt f\u00fcr alle Lebewesen.', topic: 'dna' },
+  { q: 'Warum ist es m\u00f6glich, ein menschliches Gen in Bakterien einzubauen?', a: 'Weil der genetische Code universell ist \u2013 alle Lebewesen lesen Tripletts gleich.', topic: 'dna' },
+  // GENETIK
+  { q: 'Was bedeutet dominant und rezessiv?', a: 'Dominant: Genvariante, die sich durchsetzt (Gro\u00dfbuchstabe). Rezessiv: Genvariante, die unterdr\u00fcckt wird (Kleinbuchstabe). Rezessiv zeigt sich nur, wenn beide Varianten rezessiv sind.', topic: 'genetik' },
+  { q: 'Was besagt Mendels 1. Regel?', a: 'Uniformit\u00e4tsregel: Kreuzt man zwei reinerbige Lebewesen (SS \u00d7 ss), sind alle Nachkommen der 1. Generation mischerbig (Ss) und sehen gleich aus.', topic: 'genetik' },
+  { q: 'Was besagt Mendels 2. Regel?', a: 'Spaltungsregel: Kreuzt man zwei mischerbige Lebewesen (Ss \u00d7 Ss), sind die Nachkommen im Verh\u00e4ltnis 3:1 (dominant:rezessiv).', topic: 'genetik' },
+  { q: 'Was sind Mutationen und was sind m\u00f6gliche Ursachen?', a: 'Mutationen sind Ver\u00e4nderungen der Erbinformationen. Ursachen: UV-Strahlung, Chemikalien, Viren, Radioaktivit\u00e4t, Kopierfehler bei der DNA-Verdopplung.', topic: 'genetik' },
+  { q: 'Was bedeutet reinerbig vs. mischerbig?', a: 'Reinerbig (SS oder ss): beide Genvarianten gleich. Mischerbig (Ss): zwei verschiedene Genvarianten f\u00fcr dasselbe Merkmal.', topic: 'genetik' },
+  // GENTECHNIK
+  { q: 'Was ist Gentechnik und was ist ein GVO?', a: 'Gentechnik = alle Methoden, die Erbinformationen gezielt ver\u00e4ndern. GVO = gentechnisch ver\u00e4nderter Organismus.', topic: 'gentechnik' },
+  { q: 'Wie wird Insulin mithilfe von Bakterien hergestellt?', a: 'Das menschliche Insulin-Gen wird in ein Plasmid (Gen-Taxi) eingebaut und in Bakterien eingef\u00fcgt. Die Bakterien produzieren dann menschliches Insulin.', topic: 'gentechnik' },
+  { q: 'Was ist CRISPR/Cas9 und wer hat es entdeckt?', a: 'Eine pr\u00e4zise Gen-Schere zum gezielten Ver\u00e4ndern der DNA. Entdeckt von Jennifer Doudna und Emmanuelle Charpentier (Nobelpreis 2020).', topic: 'gentechnik' },
+  { q: 'Was ist Gr\u00fcne Gentechnik? Nenne ein Beispiel.', a: 'Gr\u00fcne Gentechnik ver\u00e4ndert Pflanzen gentechnisch. Beispiel: Bt-Mais \u2013 enth\u00e4lt ein Gift-Gen eines Bakteriums gegen den Maiszünsler.', topic: 'gentechnik' },
+  { q: 'Nenne die drei Wertvorstellungen der Gen-Ethik.', a: 'Menschenw\u00fcrde (Selbstbestimmung), Verantwortung (k\u00fcnftige Risiken bedenken), Gl\u00fcck (Wohlergehen aller Beteiligten).', topic: 'gentechnik' },
+  { q: 'Was ist das Klonen? Nenne ein bekanntes Beispiel.', a: 'Klonen = Erzeugung eines Lebewesens mit identischen Erbinformationen durch Kerntransfer. Beispiel: Schaf Dolly (2003).', topic: 'gentechnik' }
+];
+
+var fcCards = [];
+var fcIndex = 0;
+
+function initFlashcards() {
+  var topic = document.getElementById('fcTopic').value;
+  fcCards = [];
+  for (var i = 0; i < flashcardData.length; i++) {
+    if (topic === 'all' || flashcardData[i].topic === topic) fcCards.push(flashcardData[i]);
+  }
+  // Shuffle
+  for (var i = fcCards.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = fcCards[i]; fcCards[i] = fcCards[j]; fcCards[j] = tmp;
+  }
+  fcIndex = 0;
+  showCard();
+}
+
+function showCard() {
+  if (fcCards.length === 0) return;
+  var inner = document.getElementById('fcInner');
+  inner.classList.remove('flipped');
+  var c = fcCards[fcIndex];
+  document.getElementById('fcQuestion').textContent = c.q;
+  document.getElementById('fcAnswer').textContent   = c.a;
+  document.getElementById('fcCounter').textContent  = (fcIndex + 1) + ' / ' + fcCards.length;
+  var pct = Math.round(((fcIndex + 1) / fcCards.length) * 100);
+  document.getElementById('fcProgFill').style.width = pct + '%';
+  document.getElementById('fcProgText').textContent = 'K\u00e4rtchen ' + (fcIndex+1) + ' von ' + fcCards.length;
+}
+
+function flipCard() {
+  document.getElementById('fcInner').classList.toggle('flipped');
+}
+
+function nextCard() {
+  if (fcIndex < fcCards.length - 1) { fcIndex++; showCard(); }
+}
+
+function prevCard() {
+  if (fcIndex > 0) { fcIndex--; showCard(); }
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// QUIZ DATA
+// ════════════════════════════════════════════════════════════════════════
+var allQuizQuestions = [
+  // ── LEICHT ─────────────────────────────────────────────────────────
+  { q: 'Welche Zellbestandteile haben ALLE Zellen (tierisch und pflanzlich)?', opts: ['Zellwand, Zellkern, Vakuole', 'Zellmembran, Zellkern, Mitochondrien', 'Blattgr\u00fcnkorn, Zellwand, Zellkern', 'Vakuole, Blattgr\u00fcnkorn, Zellmembran'], ans: 1, diff: 'easy', topic: 'zellen', expl: 'Zellmembran, Zellkern und Mitochondrien kommen in allen Zellen vor. Zellwand und Blattgr\u00fcnkorn gibt es nur bei Pflanzen.' },
+  { q: 'Wie viele Chromosomen hat eine normale menschliche K\u00f6rperzelle?', opts: ['23', '44', '46', '92'], ans: 2, diff: 'easy', topic: 'zellen', expl: 'Menschliche K\u00f6rperzellen haben 46 Chromosomen \u2013 23 von der Mutter und 23 vom Vater.' },
+  { q: 'Was ist DNA?', opts: ['Ein Hormon im Blut', 'Ein Molek\u00fcl, das Erbinformationen speichert', 'Eine Art Zellmembran', 'Ein Protein im Zellkern'], ans: 1, diff: 'easy', topic: 'dna', expl: 'DNA (Desoxyribonukleins\u00e4ure) ist das Molek\u00fcl, in dem alle Erbinformationen gespeichert sind.' },
+  { q: 'Welche Basen paaren sich in der DNA?', opts: ['A mit C und G mit T', 'A mit G und C mit T', 'A mit T und G mit C', 'A mit A und G mit G'], ans: 2, diff: 'easy', topic: 'dna', expl: 'Die feste Paarungsregel: Adenin (A) mit Thymin (T) und Guanin (G) mit Cytosin (C).' },
+  { q: 'Was ist ein Gen?', opts: ['Ein Chromosom', 'Ein Protein', 'Ein DNA-Abschnitt mit dem Bauplan f\u00fcr ein Protein', 'Eine Zelle'], ans: 2, diff: 'easy', topic: 'dna', expl: 'Ein Gen ist ein bestimmter Abschnitt auf der DNA, der die Bauanleitung f\u00fcr ein spezifisches Protein enth\u00e4lt.' },
+  { q: 'Was bedeutet der Begriff GVO?', opts: ['Gro\u00dfer visueller Organismus', 'Gentechnisch ver\u00e4nderter Organismus', 'Generell verbotener Organismus', 'Genetisch vervielf\u00e4ltigter Organismus'], ans: 1, diff: 'easy', topic: 'gentechnik', expl: 'GVO steht f\u00fcr gentechnisch ver\u00e4nderter Organismus \u2013 also Pflanzen, Tiere oder Bakterien mit ge\u00e4ndertem Erbgut.' },
+  { q: 'Welche Wertvorstellungen werden bei ethischen Fragen zur Gentechnik verwendet?', opts: ['Fortschritt, Sicherheit, Wirtschaft', 'Menschenw\u00fcrde, Verantwortung, Gl\u00fcck', 'Freiheit, Gleichheit, Br\u00fcderlichkeit', 'Natur, Kultur, Technik'], ans: 1, diff: 'easy', topic: 'gentechnik', expl: 'Gentechnische Entscheidungen werden an drei Wertvorstellungen gemessen: Menschenw\u00fcrde, Verantwortung und Gl\u00fcck.' },
+  { q: 'In welchem Zellbestandteil befinden sich die Chromosomen?', opts: ['Zellmembran', 'Mitochondrien', 'Vakuole', 'Zellkern'], ans: 3, diff: 'easy', topic: 'zellen', expl: 'Die Chromosomen liegen im Zellkern. Dort sind alle Erbinformationen gespeichert.' },
+  // ── MITTEL ─────────────────────────────────────────────────────────
+  { q: 'Welche Aussage zur Mitose ist FALSCH?', opts: ['Die Erbinformationen werden vor der Teilung verdoppelt', 'Beide Tochterzellen sind genetisch identisch', 'Es entstehen 4 Tochterzellen', 'Pol-Fasern trennen die Chromatiden'], ans: 2, diff: 'medium', topic: 'zellen', expl: 'Bei der Mitose entstehen 2 (nicht 4) identische Tochterzellen. 4 Zellen entstehen bei der Meiose.' },
+  { q: 'Was ist der Unterschied zwischen einem 1-Chromatid- und einem 2-Chromatiden-Chromosom?', opts: ['Die Gr\u00f6\u00dfe ist verschieden', 'Das 2-Chromatiden-Chromosom entsteht nach der DNA-Verdopplung und enth\u00e4lt zwei identische Kopien', 'Sie befinden sich in verschiedenen Zellen', 'Das 1-Chromatid-Chromosom hat mehr Erbinformation'], ans: 1, diff: 'medium', topic: 'zellen', expl: 'Nach der DNA-Verdopplung in Schritt 1 der Mitose hat jedes Chromosom zwei identische Chromatiden \u2013 das ist das 2-Chromatiden-Chromosom (X-Form).' },
+  { q: 'Mendels 1. Regel sagt: Kreuzt man SS \u00d7 ss, sehen alle Nachkommen gleich aus. Warum?', opts: ['Weil alle Nachkommen reinerbig dominat sind (SS)', 'Weil alle mischerbig (Ss) sind und S dominant ist', 'Weil alle reinerbig rezessiv (ss) sind', 'Weil die Gene zuf\u00e4llig verteilt werden'], ans: 1, diff: 'medium', topic: 'genetik', expl: 'Jedes Nachkommen erh\u00e4lt ein S von der reinerbigen Mutter und ein s vom reinerbigen Vater \u2192 alle sind Ss. Da S dominant ist, sehen alle gleich aus.' },
+  { q: 'Kreuzung Ss \u00d7 Ss. Welches Verh\u00e4ltnis der Nachkommen ist zu erwarten?', opts: ['Alle gleich', '1 SS : 2 Ss : 1 ss (3 dominant : 1 rezessiv)', '2 SS : 2 ss (1:1)', '1 SS : 1 Ss : 1 ss'], ans: 1, diff: 'medium', topic: 'genetik', expl: 'Kreuzungsschema: SS, Ss, Ss, ss \u2192 Verh\u00e4ltnis 3 dominant (SS + Ss + Ss) : 1 rezessiv (ss). Das ist Mendels 2. Regel (Spaltungsregel).' },
+  { q: 'Welche Funktion hat ein Plasmid bei der Insulinherstellung?', opts: ['Es ist das Hormon selbst', 'Es transportiert das Insulin-Gen in Bakterien (Gen-Taxi)', 'Es verdoppelt die Bakterien', 'Es produziert die Aminos\u00e4uren'], ans: 1, diff: 'medium', topic: 'gentechnik', expl: 'Das Plasmid ist eine ringf\u00f6rmige Bakterien-DNA. Das Insulin-Gen wird dort eingebaut, und das Plasmid transportiert es in Bakterien.' },
+  { q: 'Was passiert bei der DNA-Verdopplung?', opts: ['Die gesamte Zelle verdoppelt sich zuerst', 'Ein Enzym trennt die Doppelhelix, neue Bausteine lagern sich nach Paarungsregeln an', 'Die DNA wird einfach kopiert ohne Enzym', 'Nur die Gene werden verdoppelt, nicht die ganze DNA'], ans: 1, diff: 'medium', topic: 'dna', expl: 'Ein Enzym trennt den Doppelstrang auf. An jedem Einzelstrang lagern sich neue DNA-Bausteine nach den Paarungsregeln (A-T, G-C) an.' },
+  { q: 'Was versteht man unter dem genetischen Code?', opts: ['Die geheimen Gene eines Lebewesens', 'Die Regel, dass je 3 Basen (Triplett) eine Aminos\u00e4ure codieren', 'Ein geheimes Kennwort der DNA', 'Die Anzahl der Basen im Chromosom'], ans: 1, diff: 'medium', topic: 'dna', expl: 'Je 3 aufeinanderfolgende Basen (Basen-Triplett) codieren eine Aminos\u00e4ure. Dieser Code ist universell und gilt f\u00fcr alle Lebewesen.' },
+  { q: 'Was ist ein Klon?', opts: ['Eine mutierte Zelle', 'Ein Lebewesen mit identischen Erbinformationen wie ein anderes', 'Ein gentechnisch ver\u00e4ndertes Tier', 'Ein Chromosomenfehler'], ans: 1, diff: 'medium', topic: 'gentechnik', expl: 'Ein Klon hat exakt dieselben Erbinformationen wie das Ursprungslebewesen, weil der Zellkern \u00fcbertragen wird.' },
+  { q: 'Warum k\u00f6nnen Geschlechtszellen nur 23 Chromosomen haben?', opts: ['Weil Geschlechtszellen kleiner sind', 'Damit bei der Befruchtung die richtige Zahl von 46 entsteht', 'Weil 23 gen\u00fcgen f\u00fcr alle Funktionen', 'Aus Platzmangel'], ans: 1, diff: 'medium', topic: 'zellen', expl: 'W\u00fcrden Ei- und Samenzellen je 46 Chromosomen haben, h\u00e4tten Kinder 92, Enkelkinder 184 usw. Durch die Meiose wird die Chromosomenzahl halbiert.' },
+  // ── SCHWER ─────────────────────────────────────────────────────────
+  { q: 'Eine DNA-Sequenz lautet: ATG-CGT-TAA. Wie viele Aminos\u00e4uren werden h\u00f6chstens codiert?', opts: ['3', '2 (ATG=Start/Met, CGT=Arg; TAA=Stopp)', '1', '9 (eine pro Base)'], ans: 1, diff: 'hard', topic: 'dna', expl: 'ATG = Start (Methionin), CGT = Arginin, TAA = Stopp. Es werden also 2 Aminos\u00e4uren eingebaut und dann stoppt die Proteinsynthese.' },
+  { q: 'Warum bleiben die meisten Mutationen ohne Auswirkungen?', opts: ['Weil Mutationen im\u00e4\u00e4r positiv sind', 'Weil viele Aminos\u00e4uren durch mehrere Tripletts codiert werden (stille Mutationen) und das zweite Chromosom Fehler ausgleicht', 'Weil DNA-Fehler immer korrigiert werden', 'Weil nur 10% der Mutationen in Genen liegen'], ans: 1, diff: 'hard', topic: 'dna', expl: 'Viele Tripletts codieren dieselbe Aminos\u00e4ure (stille Mutation). Au\u00dferdem kompensiert h\u00e4ufig das zweite Chromosom einen defekten Abschnitt.' },
+  { q: 'CRISPR/Cas9 gilt als revolution\u00e4r. Welche Eigenschaft macht es bes. besorgniserregend?', opts: ['Es kostet Millionen, nur wenige k\u00f6nnen es nutzen', 'Es ist billig, einfach zu bedienen und hinterl\u00e4sst keine erkennbaren Spuren im Erbgut', 'Es funktioniert nur bei Bakterien', 'Es wurde noch nie am Menschen angewendet'], ans: 1, diff: 'hard', topic: 'gentechnik', expl: 'CRISPR/Cas9 ist g\u00fcnstig, einfach anwendbar und \u00e4ndert das Erbgut so, dass es nicht von nat\u00fcrlichen Mutationen unterscheidbar ist \u2013 das erschwert Kontrolle und Regulierung.' },
+  { q: 'Warum kann eine scheckige Katze (rezessiv) nie mischerbig sein?', opts: ['Weil scheckig immer reinerbig dominant ist', 'Weil das rezessive Merkmal nur sichtbar wird, wenn beide Genvarianten rezessiv sind (ss)', 'Weil Katzen immer reinerbig sind', 'Weil Scheckigkeit kein genetisches Merkmal ist'], ans: 1, diff: 'hard', topic: 'genetik', expl: 'Das rezessive Merkmal (s = scheckig) zeigt sich nur, wenn kein dominantes S vorhanden ist \u2013 also muss die Katze ss sein (reinerbig rezessiv).' },
+  { q: 'Was w\u00e4re die Folge, wenn bei der Meiose die Chromosomenpaare NICHT getrennt w\u00fcrden?', opts: ['Die Zelle w\u00fcrde st\u00e4rker', 'Geschlechtszellen h\u00e4tten 46 statt 23 Chromosomen, und die befruchtete Eizelle h\u00e4tte 92 \u2013 das ist nicht lebensstabil', 'Gar nichts', 'Alle Kinder w\u00e4ren Klone'], ans: 1, diff: 'hard', topic: 'zellen', expl: 'Wenn Geschlechtszellen 46 Chromosomen h\u00e4tten und zwei sich vereinen, ent\u00fct eine Zelle mit 92 Chromosomen \u2013 dies ist beim Menschen nicht mit dem Leben vereinbar.' },
+  { q: 'Worin besteht der ethische Kernkonflikt beim Fall Noah und Elodie?', opts: ['Die Eltern haben keine Erlaubnis f\u00fcr das Experiment eingeholt', 'Elodie wird als Werkzeug zur Rettung ihres Bruders eingesetzt, was die Menschenw\u00fcrde und Selbstbestimmung betrifft', 'Der Arzt hat einen Fehler gemacht', 'Die Kosten der Operation waren zu hoch'], ans: 1, diff: 'hard', topic: 'gentechnik', expl: 'Der Kernkonflikt liegt in der Menschenw\u00fcrde: Darf ein Kind (Elodie) gezielt erzeugt werden, um ein anderes zu retten? Kann Elodie das selbst entscheiden?' },
+  { q: 'Eine DNA-Analyse ergibt 20% Adenin (A). Wieviel Prozent entfallen auf G?', opts: ['20%', '30%', '40%', '10%'], ans: 1, diff: 'hard', topic: 'dna', expl: 'Da A mit T paart und G mit C, gilt: A=T=20%. Dann sind 60% f\u00fcr G und C \u2192 G=C=30%.' },
+  { q: 'Wie hei\u00dft Mendels 3. Regel und was besagt sie?', opts: ['Uniformit\u00e4tsregel: Alle Nachkommen sehen gleich aus', 'Unabh\u00e4ngigkeitsregel: Merkmale auf verschiedenen Chromosomen werden unabh\u00e4ngig vererbt', 'Spaltungsregel: Nachkommen spalten sich 3:1 auf', 'Vererbungsregel: Eltern vererben immer 50:50'], ans: 1, diff: 'hard', topic: 'genetik', expl: 'Die 3. Mendelsche Regel (Unabh\u00e4ngigkeits- oder Neukombinationsregel) besagt: Merkmale auf verschiedenen Chromosomen werden unabh\u00e4ngig voneinander vererbt und k\u00f6nnen sich neu kombinieren.' }
+];
+
+// ════════════════════════════════════════════════════════════════════════
+// QUIZ LOGIC
+// ════════════════════════════════════════════════════════════════════════
+var quizQuestions = [];
+var quizCurrent   = 0;
+var quizScore     = 0;
+var quizAnswered  = false;
+var quizWrongList = [];
+
+function startQuiz() {
+  var topic = document.getElementById('qTopic').value;
+  var diff  = document.getElementById('qDiff').value;
+  var count = document.getElementById('qCount').value;
+
+  quizQuestions = [];
+  for (var i = 0; i < allQuizQuestions.length; i++) {
+    var q = allQuizQuestions[i];
+    if ((topic === 'all' || q.topic === topic) && (diff === 'all' || q.diff === diff)) {
+      quizQuestions.push(q);
+    }
+  }
+  // Shuffle
+  for (var i = quizQuestions.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = quizQuestions[i]; quizQuestions[i] = quizQuestions[j]; quizQuestions[j] = tmp;
+  }
+  if (count !== 'all') {
+    var n = parseInt(count);
+    if (quizQuestions.length > n) quizQuestions = quizQuestions.slice(0, n);
+  }
+  if (quizQuestions.length === 0) {
+    alert('Keine Fragen f\u00fcr diese Kombination. Bitte andere Filter w\u00e4hlen.');
+    return;
+  }
+  quizCurrent  = 0;
+  quizScore    = 0;
+  quizAnswered = false;
+  quizWrongList = [];
+  document.getElementById('quizSetup').style.display   = 'none';
+  document.getElementById('quizResults').style.display = 'none';
+  document.getElementById('quizArea').style.display    = 'block';
+  showQuestion();
+}
+
+function showQuestion() {
+  var q = quizQuestions[quizCurrent];
+  var pct = Math.round(((quizCurrent) / quizQuestions.length) * 100);
+  document.getElementById('qProgFill').style.width = pct + '%';
+  document.getElementById('qInfo').textContent = 'Frage ' + (quizCurrent+1) + ' von ' + quizQuestions.length;
+  document.getElementById('qNextBtn').disabled = true;
+  quizAnswered = false;
+
+  var diffLabel = { easy: 'Leicht', medium: 'Mittel', hard: 'Schwer' }[q.diff];
+  var diffClass = { easy: 'diff-easy', medium: 'diff-medium', hard: 'diff-hard' }[q.diff];
+
+  var html = '<div class="quiz-q-num">Frage ' + (quizCurrent+1) + '<span class="quiz-q-diff ' + diffClass + '">' + diffLabel + '</span></div>';
+  html += '<div class="quiz-q-text">' + q.q + '</div>';
+  html += '<div class="quiz-options" id="qOpts">';
+  for (var i = 0; i < q.opts.length; i++) {
+    html += '<button class="quiz-opt" onclick="selectOpt(' + i + ')">' + q.opts[i] + '</button>';
+  }
+  html += '</div>';
+  html += '<div class="quiz-feedback" id="qFeedback"></div>';
+  document.getElementById('qBox').innerHTML = html;
+}
+
+function selectOpt(idx) {
+  if (quizAnswered) return;
+  quizAnswered = true;
+  var q = quizQuestions[quizCurrent];
+  var opts = document.querySelectorAll('.quiz-opt');
+  for (var i = 0; i < opts.length; i++) {
+    opts[i].disabled = true;
+    if (i === q.ans) opts[i].classList.add('correct');
+    else if (i === idx) opts[i].classList.add('wrong');
+  }
+  var fb = document.getElementById('qFeedback');
+  fb.style.display = 'block';
+  if (idx === q.ans) {
+    quizScore++;
+    fb.className = 'quiz-feedback correct-fb';
+    fb.innerHTML = '\u2705 Richtig! ' + q.expl;
+  } else {
+    quizWrongList.push({ q: q.q, correct: q.opts[q.ans], yours: q.opts[idx] });
+    fb.className = 'quiz-feedback wrong-fb';
+    fb.innerHTML = '\u274C Leider falsch. ' + q.expl;
+  }
+  document.getElementById('qNextBtn').disabled = false;
+}
+
+function nextQuestion() {
+  if (!quizAnswered) return;
+  quizCurrent++;
+  if (quizCurrent < quizQuestions.length) {
+    showQuestion();
+  } else {
+    showResults();
+  }
+}
+
+function showResults() {
+  document.getElementById('quizArea').style.display    = 'none';
+  document.getElementById('quizSetup').style.display   = 'none';
+  document.getElementById('quizResults').style.display = 'block';
+  var pct = Math.round((quizScore / quizQuestions.length) * 100);
+  var emoji = pct >= 80 ? '\ud83c\udf1f' : pct >= 60 ? '\ud83d\udc4d' : '\ud83d\udcaa';
+  var msg   = pct >= 80 ? 'Ausgezeichnet!' : pct >= 60 ? 'Gut gemacht!' : 'Weiter\u00fcben!';
+
+  var html = '<div class="quiz-results">';
+  html += '<div class="score-ring" style="border-color:' + (pct>=80?'#2d7d46':pct>=60?'#f9a825':'#c62828') + '">';
+  html += '<div>' + pct + '%</div><div style="font-size:14px;font-weight:400;">' + quizScore + '/' + quizQuestions.length + '</div>';
+  html += '</div>';
+  html += '<h2>' + emoji + ' ' + msg + '</h2>';
+  html += '<p>' + quizScore + ' von ' + quizQuestions.length + ' Fragen richtig beantwortet.</p>';
+  html += '<button class="quiz-btn" onclick="restartQuiz()">&#128260; Neuer Versuch</button>';
+
+  if (quizWrongList.length > 0) {
+    html += '<div class="wrong-review"><h3 style="color:#c62828;margin:20px 0 12px;">Falsch beantwortete Fragen:</h3>';
+    for (var i = 0; i < quizWrongList.length; i++) {
+      var w = quizWrongList[i];
+      html += '<div class="wrong-item">';
+      html += '<div class="wi-q">' + w.q + '</div>';
+      html += '<div class="wi-ca">\u2705 Richtige Antwort: ' + w.correct + '</div>';
+      html += '<div class="wi-ya">\u274C Deine Antwort: ' + w.yours + '</div>';
+      html += '</div>';
+    }
+    html += '</div>';
+  }
+  html += '</div>';
+  document.getElementById('quizResults').innerHTML = html;
+}
+
+function restartQuiz() {
+  document.getElementById('quizResults').style.display = 'none';
+  document.getElementById('quizSetup').style.display   = 'block';
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════════════════════════════════
+buildGlossary();
+initFlashcards();
+</script>
+</body>
+</html>
